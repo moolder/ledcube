@@ -18,7 +18,7 @@ void updateBitmap(long treal){
   long demoSwitch = (treal / 30000) % 6;
   
   showDemoSwitch(demoSwitch);
-  
+  selectedDemo = 10;
   for (int ledCount = 0; ledCount < 4; ledCount++){
   
     if (selectedDemo == -1){
@@ -33,6 +33,7 @@ void updateBitmap(long treal){
       if (demoSwitch == 7) updateBitmapTestPattern(treal); // halt ein testmuster
       if (demoSwitch == 8) updateBitmapAllOn(treal); // alle leds an. immer.
       if (demoSwitch == 9) updateBitmapPlane3(treal, ledPos, true, false); // verschiebende Ebene
+      if (demoSwitch == 10) updateBitmapAdxl1(treal); // adxl test 1
     } else {
       if (selectedDemo == 0) updateBitmapPacMan(treal);
       if (selectedDemo == 1) updateBitmapRandom2(treal); // pfeile
@@ -45,6 +46,7 @@ void updateBitmap(long treal){
       if (selectedDemo == 7) updateBitmapTestPattern(treal); // halt ein testmuster
       if (selectedDemo == 8) updateBitmapAllOn(treal); // alle leds an. immer.
       if (selectedDemo == 9) updateBitmapPlane3(treal, ledPos, true, false); // verschiebende Ebene
+      if (selectedDemo == 10) updateBitmapAdxl1(treal); // adxl test 1
     }
   
   
@@ -67,6 +69,62 @@ void updateBitmapPacMan(long treal){
   int animNr = int((treal % (3*8000)) / 8000);
   animateBitmap(treal, animNr, deltaX, deltaY, true);
 }
+
+void updateBitmapAdxl1(long treal){
+  value_x = 0;
+  value_y = 0;
+  value_z = 0;
+  for (int count = 0; count < MESSANZAHL; count++){
+    value_x += analogRead(X_AXIS_PIN) / MESSANZAHL;
+    delay(1);
+    value_y += analogRead(Y_AXIS_PIN) / MESSANZAHL;
+    delay(1);
+    value_z += analogRead(Z_AXIS_PIN) / MESSANZAHL;
+    delay(1);
+  }
+  Serial.print(value_x);
+  Serial.print(", ");
+  Serial.print(value_y);
+  Serial.print(", ");
+  Serial.println(value_z);
+  
+  for (int dx = 0; dx < 8; dx++){
+    if (dx < (value_x / 32)){
+      bitmap[dx][0][0] = 255; // r
+      bitmap[dx][1][0] = 0; // g
+      bitmap[dx][2][0] = 0; // b
+    } else {
+      bitmap[dx][0][0] = 0; // r
+      bitmap[dx][1][0] = 0; // g
+      bitmap[dx][2][0] = 0; // b
+    }
+  }
+
+  for (int dx = 0; dx < 8; dx++){
+    if (dx < (value_y / 32)){
+      bitmap[dx][0][1] = 0; // r
+      bitmap[dx][1][1] = 255; // g
+      bitmap[dx][2][1] = 0; // b
+    } else {
+      bitmap[dx][0][1] = 0; // r
+      bitmap[dx][1][1] = 0; // g
+      bitmap[dx][2][1] = 0; // b
+    }
+  }
+
+  for (int dx = 0; dx < 8; dx++){
+    if (dx < (value_z / 32)){
+      bitmap[dx][0][2] = 0; // r
+      bitmap[dx][1][2] = 0; // g
+      bitmap[dx][2][2] = 255; // b
+    } else {
+      bitmap[dx][0][2] = 0; // r
+      bitmap[dx][1][2] = 0; // g
+      bitmap[dx][2][2] = 0; // b
+    }
+  }
+}  
+
 
 void animateBitmap(long treal, int animNr, int deltaX, int deltaY, boolean drawBlack){
   int r = 0;
