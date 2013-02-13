@@ -29,14 +29,7 @@ int sqrtval[31];
 long pacman[4][8];
 
 
-#define X_AXIS_PIN 2 // ANALOG
-#define Y_AXIS_PIN 1
-#define Z_AXIS_PIN 0
-#define MESSANZAHL 1
-int  value_x, value_y, value_z;
-
 void setup() {
-  Serial.begin(57600);
   setSqrtVal();
   
   shiftDataPin[0] = 9; // red
