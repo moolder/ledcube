@@ -15,35 +15,36 @@ void initBitmap(){
 int ledPos = 0;
 void updateBitmap(long treal){
 
-  long demoSwitch = (treal / 30000) % 7;
+  long demoSwitch = (treal / 30000) % 6;
   
-  //demoSwitch = 7; // TODO 
-  //selectedDemo = 4;
+  showDemoSwitch(demoSwitch);
   
   for (int ledCount = 0; ledCount < 4; ledCount++){
   
     if (selectedDemo == -1){
-      if (demoSwitch == 0) updateBitmapPlane3(treal, ledPos, false, true); // rotierende Ebene um Mitte
+      if (demoSwitch == 0) updateBitmapPacMan(treal);
       if (demoSwitch == 1) updateBitmapRandom2(treal); // pfeile
-      if (demoSwitch == 2) updateBitmapPlane3(treal, ledPos, true, false); // verschiebende Ebene
-      if (demoSwitch == 3) updateBitmapPlane1(treal, ledPos); // schon sehr cool
-      if (demoSwitch == 4) updateBitmapRandom1(treal); // blink blink
-      if (demoSwitch == 5) updateBitmapPlane3(treal, ledPos, true, true); // rotierende und verschiebende Ebene
-      if (demoSwitch == 6) updateBitmapPlane2(treal, ledPos);
+      if (demoSwitch == 2) updateBitmapPlane1(treal, ledPos); // schon sehr cool
+      if (demoSwitch == 3) updateBitmapRandom1(treal); // blink blink
+      if (demoSwitch == 4) updateBitmapPlane3(treal, ledPos, true, true); // rotierende und verschiebende Ebene
+      if (demoSwitch == 5) updateBitmapPlane2(treal, ledPos);
       //if (demoSwitch == 7) updateBitmapTestButtons(treal, ledPos);
-      if (demoSwitch == 8) updateBitmapTestPattern(treal); // halt ein testmuster
-      if (demoSwitch == 9) updateBitmapAllOn(treal); // alle leds an. immer.
+      if (demoSwitch == 6) updateBitmapPlane3(treal, ledPos, false, true); // rotierende Ebene um Mitte
+      if (demoSwitch == 7) updateBitmapTestPattern(treal); // halt ein testmuster
+      if (demoSwitch == 8) updateBitmapAllOn(treal); // alle leds an. immer.
+      if (demoSwitch == 9) updateBitmapPlane3(treal, ledPos, true, false); // verschiebende Ebene
     } else {
-      if (selectedDemo == 0) updateBitmapPlane3(treal, ledPos, false, true); // rotierende Ebene um Mitte
+      if (selectedDemo == 0) updateBitmapPacMan(treal);
       if (selectedDemo == 1) updateBitmapRandom2(treal); // pfeile
-      if (selectedDemo == 2) updateBitmapPlane3(treal, ledPos, true, false); // verschiebende Ebene
-      if (selectedDemo == 3) updateBitmapPlane1(treal, ledPos); // schon sehr cool
-      if (selectedDemo == 4) updateBitmapRandom1(treal); // blink blink
-      if (selectedDemo == 5) updateBitmapPlane3(treal, ledPos, true, true); // rotierende und verschiebende Ebene
-      if (selectedDemo == 6) updateBitmapPlane2(treal, ledPos);
+      if (selectedDemo == 2) updateBitmapPlane1(treal, ledPos); // schon sehr cool
+      if (selectedDemo == 3) updateBitmapRandom1(treal); // blink blink
+      if (selectedDemo == 4) updateBitmapPlane3(treal, ledPos, true, true); // rotierende und verschiebende Ebene
+      if (selectedDemo == 5) updateBitmapPlane2(treal, ledPos);
       //if (selectedDemo == 7) updateBitmapTestButtons(treal, ledPos);
-      if (selectedDemo == 8) updateBitmapTestPattern(treal); // halt ein testmuster
-      if (selectedDemo == 9) updateBitmapAllOn(treal); // alle leds an. immer.
+      if (selectedDemo == 6) updateBitmapPlane3(treal, ledPos, false, true); // rotierende Ebene um Mitte
+      if (selectedDemo == 7) updateBitmapTestPattern(treal); // halt ein testmuster
+      if (selectedDemo == 8) updateBitmapAllOn(treal); // alle leds an. immer.
+      if (selectedDemo == 9) updateBitmapPlane3(treal, ledPos, true, false); // verschiebende Ebene
     }
   
   
@@ -57,6 +58,55 @@ void updateBitmap(long treal){
 }
 
 long trealModOld = 99999;
+
+int deltaX = 0;
+int deltaY = 0;
+void updateBitmapPacMan(long treal){
+  int deltaX = int((treal % 8000) / 500 - 8);
+  int deltaY = 0; //deltaY = int((treal % 16000) / 1000 - 8);
+  int animNr = int((treal % (3*8000)) / 8000);
+  animateBitmap(treal, animNr, deltaX, deltaY, true);
+}
+
+void animateBitmap(long treal, int animNr, int deltaX, int deltaY, boolean drawBlack){
+  int r = 0;
+  int g = 0;
+  int b = 0;
+  int deltaFrame = 0;
+  if (animNr == 0){
+    r = 255;
+    g = 255;
+    b = 0;
+    deltaFrame = 0;
+  } else if (animNr == 1){
+    r = 0;
+    g = 0;
+    b = 255;
+    deltaFrame = 2;
+  } else if (animNr == 2){
+    r = 255;
+    g = 0;
+    b = 255;
+    deltaFrame = 2;
+  }
+  int frame = 0;
+  if ((treal % 500) > 250) frame = 1;
+  for (int z = 0; z < LAYERNUM; z++) {
+    for (int x = 0; x < CUBEWIDTH; x++) {
+      long shiftLeftValue = ((7-x)+deltaX);
+      if ((shiftLeftValue >= 0) && (z+deltaY > -1) && (z+deltaY < 8) && (pacman[frame+deltaFrame][z+deltaY] & 1<<shiftLeftValue) > 0){
+        bitmap[x][0][z] = r;
+        bitmap[x][1][z] = g;
+        bitmap[x][2][z] = b;
+      } else if (drawBlack) {
+        bitmap[x][0][z] = 0;
+        bitmap[x][1][z] = 0;
+        bitmap[x][2][z] = 0;
+      }
+    }
+
+  }
+}  
 
 void updateBitmapAllOn(long treal){
   for (int z = 0; z < LAYERNUM; z++) {

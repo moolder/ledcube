@@ -50,8 +50,41 @@ float sqrttable(float invalueF){
   if (invalue <= 280) return 1.67332;
   if (invalue <= 290) return 1.7029386;
   return 1.7320508;
+}    
+
+void setSqrtVal(){
+  sqrtval[0] = 0;
+  sqrtval[1] = 3;
+  sqrtval[2] = 4;
+  sqrtval[3] = 5;
+  sqrtval[4] = 6;
+  sqrtval[5] = 7;
+  sqrtval[6] = 7;
+  sqrtval[7] = 8;
+  sqrtval[8] = 8;
+  sqrtval[9] = 9;
+  sqrtval[10] = 10;
+  sqrtval[11] = 10;
+  sqrtval[12] = 10;
+  sqrtval[13] = 11;
+  sqrtval[14] = 11;
+  sqrtval[15] = 12;
+  sqrtval[16] = 12;
+  sqrtval[17] = 13;
+  sqrtval[18] = 13;
+  sqrtval[19] = 13;
+  sqrtval[20] = 14;
+  sqrtval[21] = 14;
+  sqrtval[22] = 14;
+  sqrtval[23] = 15;
+  sqrtval[24] = 15;
+  sqrtval[25] = 15;
+  sqrtval[26] = 16;
+  sqrtval[27] = 16;
+  sqrtval[28] = 16;
+  sqrtval[29] = 17;
+  sqrtval[30] = 17;
 }
-    
 
 float crossProductX(float x1, float y1, float z1, float x2, float y2, float z2){
   return y1*z2 - z1*y2;
@@ -84,4 +117,7 @@ void showValues(void){
   digitalWrite(SHIFT_REG_CLOCK, HIGH);
 }
 
+void showDemoSwitch(long demoSwitch){
+  return;
+}
 

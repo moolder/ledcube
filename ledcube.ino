@@ -1,4 +1,6 @@
+// RGB LED Matrix - branch of the ledcube4x4x4
 // this version (_05) tries to create better performance by losing sqrt calculations for the distance calc
+// license: Creative Commons Non-Commercial Attribution Share-Alike
 
 
 // STCP:
@@ -23,39 +25,12 @@ int shiftDataPin[4];
 
 int sqrtval[31];
 
-void setup() {
-  sqrtval[0] = 0;
-  sqrtval[1] = 3;
-  sqrtval[2] = 4;
-  sqrtval[3] = 5;
-  sqrtval[4] = 6;
-  sqrtval[5] = 7;
-  sqrtval[6] = 7;
-  sqrtval[7] = 8;
-  sqrtval[8] = 8;
-  sqrtval[9] = 9;
-  sqrtval[10] = 10;
-  sqrtval[11] = 10;
-  sqrtval[12] = 10;
-  sqrtval[13] = 11;
-  sqrtval[14] = 11;
-  sqrtval[15] = 12;
-  sqrtval[16] = 12;
-  sqrtval[17] = 13;
-  sqrtval[18] = 13;
-  sqrtval[19] = 13;
-  sqrtval[20] = 14;
-  sqrtval[21] = 14;
-  sqrtval[22] = 14;
-  sqrtval[23] = 15;
-  sqrtval[24] = 15;
-  sqrtval[25] = 15;
-  sqrtval[26] = 16;
-  sqrtval[27] = 16;
-  sqrtval[28] = 16;
-  sqrtval[29] = 17;
-  sqrtval[30] = 17;
+//bitmaps 
+long pacman[4][8];
 
+
+void setup() {
+  setSqrtVal();
   
   shiftDataPin[0] = 9; // red
   shiftDataPin[1] = 11; // green
@@ -79,8 +54,8 @@ void setup() {
     digitalWrite(shiftDataPin[p], LOW);
   }
   initBitmap();
+  initBitmaps(); //like pacman
   randomSeed(1337); //TODO
-  //Serial.begin(19200);
 }
 
 
@@ -132,11 +107,11 @@ void loop(){
 
   for (int brightness = 64; brightness < 256; brightness += 64){
     for (int z = 0; z < LAYERNUM; z++){
-      for (int x = 0; x < CUBEWIDTH; x++){
+      for (int x = CUBEWIDTH - 1; x >= 0; x--){
         pushValues(!(bitmap[x][0][z] > brightness),
           !(bitmap[7-x][1][z] > brightness),
           !(bitmap[x][2][z] > brightness),
-          !(z == x));
+          !(z == (7-x)));
       }
       
       showValues();
