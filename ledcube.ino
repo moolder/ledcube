@@ -1,6 +1,5 @@
-// RGB LED Matrix - branch of the ledcube4x4x4
 // this version (_05) tries to create better performance by losing sqrt calculations for the distance calc
-// license: Creative Commons Non-Commercial Attribution Share-Alike
+
 
 // STCP:
 #define STORAGE_REG_CLOCK 13

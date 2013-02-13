@@ -15,7 +15,7 @@ void initBitmap(){
 int ledPos = 0;
 void updateBitmap(long treal){
 
-  int demoSwitch = (treal / 30000) % 7;
+  long demoSwitch = (treal / 30000) % 7;
   
   //demoSwitch = 7; // TODO 
   //selectedDemo = 4;
@@ -30,7 +30,7 @@ void updateBitmap(long treal){
       if (demoSwitch == 4) updateBitmapRandom1(treal); // blink blink
       if (demoSwitch == 5) updateBitmapPlane3(treal, ledPos, true, true); // rotierende und verschiebende Ebene
       if (demoSwitch == 6) updateBitmapPlane2(treal, ledPos);
-      if (demoSwitch == 7) updateBitmapTestButtons(treal, ledPos);
+      //if (demoSwitch == 7) updateBitmapTestButtons(treal, ledPos);
       if (demoSwitch == 8) updateBitmapTestPattern(treal); // halt ein testmuster
       if (demoSwitch == 9) updateBitmapAllOn(treal); // alle leds an. immer.
     } else {
@@ -41,7 +41,7 @@ void updateBitmap(long treal){
       if (selectedDemo == 4) updateBitmapRandom1(treal); // blink blink
       if (selectedDemo == 5) updateBitmapPlane3(treal, ledPos, true, true); // rotierende und verschiebende Ebene
       if (selectedDemo == 6) updateBitmapPlane2(treal, ledPos);
-      if (selectedDemo == 7) updateBitmapTestButtons(treal, ledPos);
+      //if (selectedDemo == 7) updateBitmapTestButtons(treal, ledPos);
       if (selectedDemo == 8) updateBitmapTestPattern(treal); // halt ein testmuster
       if (selectedDemo == 9) updateBitmapAllOn(treal); // alle leds an. immer.
     }
@@ -67,7 +67,7 @@ void updateBitmapAllOn(long treal){
     }
   }
 }  
-
+/*
 void updateBitmapTestButtons(long treal, int ledPos){
   boolean button1Pushed = digitalRead(BUTTON_1_PIN);
   boolean button2Pushed = digitalRead(BUTTON_2_PIN);
@@ -88,7 +88,7 @@ void updateBitmapTestButtons(long treal, int ledPos){
     }
   }
 }
-  
+  */
 
 void updateBitmapRandom2(long treal){
   for (int z = 0; z < LAYERNUM; z++) {
@@ -101,10 +101,10 @@ void updateBitmapRandom2(long treal){
     }
   }
   if (trealModOld > treal % 250){
-    int rX = random(CUBEWIDTH);
-    int rY = random(CUBEHEIGHT);
-    int rZ = random(LAYERNUM);
-    int rWay = random(3);
+    int rX = (int)random(CUBEWIDTH);
+    int rY = (int)random(CUBEHEIGHT);
+    int rZ = (int)random(LAYERNUM);
+    int rWay = (int)random(3);
     int runvar;
     if (rWay == 0){
       for (runvar = 0; runvar < LAYERNUM; runvar++){
@@ -138,7 +138,7 @@ void updateBitmapRandom1(long treal){
     }
   }
   if (trealModOld > treal % 50){
-    bitmap[random(CUBEWIDTH)][random(CUBEHEIGHT)][random(LAYERNUM)] = 255;
+    bitmap[(int)random(CUBEWIDTH)][(int)random(CUBEHEIGHT)][(int)random(LAYERNUM)] = 255;
   }
   trealModOld = treal % 50;
 }
@@ -164,7 +164,7 @@ float d = 0;
 
 void updateBitmapTestPattern(long treal){
   long t = treal / 1000;
-  int tMod = t % 84;
+  long tMod = t % 84;
   
   for (int z = 0; z < LAYERNUM; z++) {
     for (int y = 0; y < CUBEHEIGHT; y++) {
